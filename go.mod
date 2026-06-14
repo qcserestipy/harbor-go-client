@@ -1,12 +1,16 @@
 module github.com/goharbor/go-client
 
-go 1.17
+go 1.25.0
 
 require (
 	github.com/go-openapi/errors v0.20.1
 	github.com/go-openapi/runtime v0.21.0
 	github.com/go-openapi/strfmt v0.21.0
 	github.com/go-openapi/swag v0.19.15
+	github.com/go-openapi/swag/conv v0.26.1
+	github.com/go-openapi/swag/jsonutils v0.26.1
+	github.com/go-openapi/swag/stringutils v0.26.1
+	github.com/go-openapi/swag/typeutils v0.26.1
 	github.com/go-openapi/validate v0.20.3
 	github.com/stretchr/testify v1.7.0
 )

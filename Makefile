@@ -3,11 +3,11 @@ SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 
 DOCKERCMD=$(shell which docker)
-SWAGGER_VERSION=v0.30.3
+SWAGGER_VERSION=v0.34.1 #v0.30.3
 SWAGGER := $(DOCKERCMD) run --rm -t -u "$(shell id -u):$(shell id -g)" -v $(shell pwd):/src -w /src quay.io/goswagger/swagger:$(SWAGGER_VERSION)
 
 ifeq ($(VERSION),)
-VERSION := v2.13.1
+VERSION := v2.14.4
 endif
 
 HARBOR_2.0_SPEC=api/v2.0/swagger.yaml
@@ -31,7 +31,7 @@ update-spec: ## update all swagger spec files
 	@wget ${HARBOR_2.0_SPEC_URL} -O ${HARBOR_2.0_SPEC}
 
 .PHONY: gen-harbor-api
-gen-harbor-api: update-spec ## generate goswagger client for harbor
+gen-harbor-api: #update-spec ## generate goswagger client for harbor
 	@$(SWAGGER) generate client -f ${HARBOR_2.0_SPEC} --target=$(HARBOR_CLIENT_2.0_DIR) --template=stratoscale --additional-initialism=CVE --additional-initialism=GC --additional-initialism=OIDC
 
 .PHONY: cleanup
