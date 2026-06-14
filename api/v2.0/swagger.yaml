@@ -7646,10 +7646,6 @@ definitions:
           Whether to skip execution until the previous active execution finishes,
           avoiding the execution of the same replication rules multiple times in parallel.
         x-isnullable: true # make this field optional to keep backward compatibility
-      replication_mode:
-        type: string
-        description: The replication mode, such as "push" and "pull".
-        x-isnullable: true
   ReplicationTrigger:
     type: object
     properties:
