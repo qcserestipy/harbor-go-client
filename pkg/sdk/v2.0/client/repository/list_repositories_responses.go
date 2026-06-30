@@ -53,6 +53,12 @@ func (o *ListRepositoriesReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return nil, result
+	case 422:
+		result := NewListRepositoriesUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 500:
 		result := NewListRepositoriesInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -469,6 +475,88 @@ func (o *ListRepositoriesNotFound) GetPayload() *models.Errors {
 }
 
 func (o *ListRepositoriesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewListRepositoriesUnprocessableEntity creates a ListRepositoriesUnprocessableEntity with default headers values
+func NewListRepositoriesUnprocessableEntity() *ListRepositoriesUnprocessableEntity {
+	return &ListRepositoriesUnprocessableEntity{}
+}
+
+/*
+ListRepositoriesUnprocessableEntity describes a response with status code 422, with default header values.
+
+Unsupported type. The resource or its properties are not supported by the requested operation.
+*/
+type ListRepositoriesUnprocessableEntity struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this list repositories unprocessable entity response has a 2xx status code
+func (o *ListRepositoriesUnprocessableEntity) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list repositories unprocessable entity response has a 3xx status code
+func (o *ListRepositoriesUnprocessableEntity) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list repositories unprocessable entity response has a 4xx status code
+func (o *ListRepositoriesUnprocessableEntity) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list repositories unprocessable entity response has a 5xx status code
+func (o *ListRepositoriesUnprocessableEntity) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list repositories unprocessable entity response a status code equal to that given
+func (o *ListRepositoriesUnprocessableEntity) IsCode(code int) bool {
+	return code == 422
+}
+
+// Code gets the status code for the list repositories unprocessable entity response
+func (o *ListRepositoriesUnprocessableEntity) Code() int {
+	return 422
+}
+
+func (o *ListRepositoriesUnprocessableEntity) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories][%d] listRepositoriesUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListRepositoriesUnprocessableEntity) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories][%d] listRepositoriesUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListRepositoriesUnprocessableEntity) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *ListRepositoriesUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// hydrates response header X-Request-Id
 	hdrXRequestID := response.GetHeader("X-Request-Id")

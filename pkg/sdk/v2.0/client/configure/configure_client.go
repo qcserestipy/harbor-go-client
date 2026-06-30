@@ -165,9 +165,13 @@ func (a *Client) UpdateConfigurations(ctx context.Context, params *UpdateConfigu
 	switch value := result.(type) {
 	case *UpdateConfigurationsOK:
 		return value, nil
+	case *UpdateConfigurationsBadRequest:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *UpdateConfigurationsUnauthorized:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *UpdateConfigurationsForbidden:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *UpdateConfigurationsUnprocessableEntity:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *UpdateConfigurationsInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())

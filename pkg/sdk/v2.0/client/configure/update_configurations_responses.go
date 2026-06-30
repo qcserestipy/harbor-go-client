@@ -3,10 +3,14 @@
 package configure
 
 import (
+	"encoding/json"
+	stderrors "errors"
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/goharbor/go-client/pkg/sdk/v2.0/models"
 )
 
 // UpdateConfigurationsReader is a Reader for the UpdateConfigurations structure.
@@ -23,6 +27,12 @@ func (o *UpdateConfigurationsReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewUpdateConfigurationsBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 401:
 		result := NewUpdateConfigurationsUnauthorized()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -31,6 +41,12 @@ func (o *UpdateConfigurationsReader) ReadResponse(response runtime.ClientRespons
 		return nil, result
 	case 403:
 		result := NewUpdateConfigurationsForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 422:
+		result := NewUpdateConfigurationsUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -98,6 +114,88 @@ func (o *UpdateConfigurationsOK) String() string {
 }
 
 func (o *UpdateConfigurationsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewUpdateConfigurationsBadRequest creates a UpdateConfigurationsBadRequest with default headers values
+func NewUpdateConfigurationsBadRequest() *UpdateConfigurationsBadRequest {
+	return &UpdateConfigurationsBadRequest{}
+}
+
+/*
+UpdateConfigurationsBadRequest describes a response with status code 400, with default header values.
+
+Bad request. The request body or query parameters are invalid. Inspect the `errors` array in the response body for details.
+*/
+type UpdateConfigurationsBadRequest struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this update configurations bad request response has a 2xx status code
+func (o *UpdateConfigurationsBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this update configurations bad request response has a 3xx status code
+func (o *UpdateConfigurationsBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this update configurations bad request response has a 4xx status code
+func (o *UpdateConfigurationsBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this update configurations bad request response has a 5xx status code
+func (o *UpdateConfigurationsBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this update configurations bad request response a status code equal to that given
+func (o *UpdateConfigurationsBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the update configurations bad request response
+func (o *UpdateConfigurationsBadRequest) Code() int {
+	return 400
+}
+
+func (o *UpdateConfigurationsBadRequest) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /configurations][%d] updateConfigurationsBadRequest %s", 400, payload)
+}
+
+func (o *UpdateConfigurationsBadRequest) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /configurations][%d] updateConfigurationsBadRequest %s", 400, payload)
+}
+
+func (o *UpdateConfigurationsBadRequest) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *UpdateConfigurationsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
 
 	return nil
 }
@@ -210,6 +308,88 @@ func (o *UpdateConfigurationsForbidden) String() string {
 }
 
 func (o *UpdateConfigurationsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewUpdateConfigurationsUnprocessableEntity creates a UpdateConfigurationsUnprocessableEntity with default headers values
+func NewUpdateConfigurationsUnprocessableEntity() *UpdateConfigurationsUnprocessableEntity {
+	return &UpdateConfigurationsUnprocessableEntity{}
+}
+
+/*
+UpdateConfigurationsUnprocessableEntity describes a response with status code 422, with default header values.
+
+Unsupported type. The resource or its properties are not supported by the requested operation.
+*/
+type UpdateConfigurationsUnprocessableEntity struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this update configurations unprocessable entity response has a 2xx status code
+func (o *UpdateConfigurationsUnprocessableEntity) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this update configurations unprocessable entity response has a 3xx status code
+func (o *UpdateConfigurationsUnprocessableEntity) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this update configurations unprocessable entity response has a 4xx status code
+func (o *UpdateConfigurationsUnprocessableEntity) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this update configurations unprocessable entity response has a 5xx status code
+func (o *UpdateConfigurationsUnprocessableEntity) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this update configurations unprocessable entity response a status code equal to that given
+func (o *UpdateConfigurationsUnprocessableEntity) IsCode(code int) bool {
+	return code == 422
+}
+
+// Code gets the status code for the update configurations unprocessable entity response
+func (o *UpdateConfigurationsUnprocessableEntity) Code() int {
+	return 422
+}
+
+func (o *UpdateConfigurationsUnprocessableEntity) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /configurations][%d] updateConfigurationsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *UpdateConfigurationsUnprocessableEntity) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /configurations][%d] updateConfigurationsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *UpdateConfigurationsUnprocessableEntity) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *UpdateConfigurationsUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
 
 	return nil
 }

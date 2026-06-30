@@ -93,6 +93,8 @@ func (a *Client) DeleteRepository(ctx context.Context, params *DeleteRepositoryP
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *DeleteRepositoryNotFound:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *DeleteRepositoryPreconditionFailed:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *DeleteRepositoryInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	}
@@ -224,6 +226,8 @@ func (a *Client) ListRepositories(ctx context.Context, params *ListRepositoriesP
 	case *ListRepositoriesForbidden:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListRepositoriesNotFound:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *ListRepositoriesUnprocessableEntity:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListRepositoriesInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())

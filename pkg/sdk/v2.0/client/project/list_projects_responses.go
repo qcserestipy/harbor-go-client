@@ -29,8 +29,20 @@ func (o *ListProjectsReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewListProjectsBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 401:
 		result := NewListProjectsUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 422:
+		result := NewListProjectsUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -141,6 +153,88 @@ func (o *ListProjectsOK) readResponse(response runtime.ClientResponse, consumer 
 	return nil
 }
 
+// NewListProjectsBadRequest creates a ListProjectsBadRequest with default headers values
+func NewListProjectsBadRequest() *ListProjectsBadRequest {
+	return &ListProjectsBadRequest{}
+}
+
+/*
+ListProjectsBadRequest describes a response with status code 400, with default header values.
+
+Bad request. The request body or query parameters are invalid. Inspect the `errors` array in the response body for details.
+*/
+type ListProjectsBadRequest struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this list projects bad request response has a 2xx status code
+func (o *ListProjectsBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list projects bad request response has a 3xx status code
+func (o *ListProjectsBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list projects bad request response has a 4xx status code
+func (o *ListProjectsBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list projects bad request response has a 5xx status code
+func (o *ListProjectsBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list projects bad request response a status code equal to that given
+func (o *ListProjectsBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the list projects bad request response
+func (o *ListProjectsBadRequest) Code() int {
+	return 400
+}
+
+func (o *ListProjectsBadRequest) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects][%d] listProjectsBadRequest %s", 400, payload)
+}
+
+func (o *ListProjectsBadRequest) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects][%d] listProjectsBadRequest %s", 400, payload)
+}
+
+func (o *ListProjectsBadRequest) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *ListProjectsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
 // NewListProjectsUnauthorized creates a ListProjectsUnauthorized with default headers values
 func NewListProjectsUnauthorized() *ListProjectsUnauthorized {
 	return &ListProjectsUnauthorized{}
@@ -205,6 +299,88 @@ func (o *ListProjectsUnauthorized) GetPayload() *models.Errors {
 }
 
 func (o *ListProjectsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewListProjectsUnprocessableEntity creates a ListProjectsUnprocessableEntity with default headers values
+func NewListProjectsUnprocessableEntity() *ListProjectsUnprocessableEntity {
+	return &ListProjectsUnprocessableEntity{}
+}
+
+/*
+ListProjectsUnprocessableEntity describes a response with status code 422, with default header values.
+
+Unsupported type. The resource or its properties are not supported by the requested operation.
+*/
+type ListProjectsUnprocessableEntity struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this list projects unprocessable entity response has a 2xx status code
+func (o *ListProjectsUnprocessableEntity) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list projects unprocessable entity response has a 3xx status code
+func (o *ListProjectsUnprocessableEntity) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list projects unprocessable entity response has a 4xx status code
+func (o *ListProjectsUnprocessableEntity) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list projects unprocessable entity response has a 5xx status code
+func (o *ListProjectsUnprocessableEntity) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list projects unprocessable entity response a status code equal to that given
+func (o *ListProjectsUnprocessableEntity) IsCode(code int) bool {
+	return code == 422
+}
+
+// Code gets the status code for the list projects unprocessable entity response
+func (o *ListProjectsUnprocessableEntity) Code() int {
+	return 422
+}
+
+func (o *ListProjectsUnprocessableEntity) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects][%d] listProjectsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListProjectsUnprocessableEntity) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects][%d] listProjectsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListProjectsUnprocessableEntity) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *ListProjectsUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// hydrates response header X-Request-Id
 	hdrXRequestID := response.GetHeader("X-Request-Id")

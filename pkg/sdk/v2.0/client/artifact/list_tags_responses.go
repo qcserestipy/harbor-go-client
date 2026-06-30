@@ -53,6 +53,12 @@ func (o *ListTagsReader) ReadResponse(response runtime.ClientResponse, consumer 
 			return nil, err
 		}
 		return nil, result
+	case 422:
+		result := NewListTagsUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 500:
 		result := NewListTagsInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -469,6 +475,88 @@ func (o *ListTagsNotFound) GetPayload() *models.Errors {
 }
 
 func (o *ListTagsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewListTagsUnprocessableEntity creates a ListTagsUnprocessableEntity with default headers values
+func NewListTagsUnprocessableEntity() *ListTagsUnprocessableEntity {
+	return &ListTagsUnprocessableEntity{}
+}
+
+/*
+ListTagsUnprocessableEntity describes a response with status code 422, with default header values.
+
+Unsupported type. The resource or its properties are not supported by the requested operation.
+*/
+type ListTagsUnprocessableEntity struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this list tags unprocessable entity response has a 2xx status code
+func (o *ListTagsUnprocessableEntity) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list tags unprocessable entity response has a 3xx status code
+func (o *ListTagsUnprocessableEntity) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list tags unprocessable entity response has a 4xx status code
+func (o *ListTagsUnprocessableEntity) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list tags unprocessable entity response has a 5xx status code
+func (o *ListTagsUnprocessableEntity) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list tags unprocessable entity response a status code equal to that given
+func (o *ListTagsUnprocessableEntity) IsCode(code int) bool {
+	return code == 422
+}
+
+// Code gets the status code for the list tags unprocessable entity response
+func (o *ListTagsUnprocessableEntity) Code() int {
+	return 422
+}
+
+func (o *ListTagsUnprocessableEntity) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/tags][%d] listTagsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListTagsUnprocessableEntity) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/tags][%d] listTagsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListTagsUnprocessableEntity) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *ListTagsUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// hydrates response header X-Request-Id
 	hdrXRequestID := response.GetHeader("X-Request-Id")

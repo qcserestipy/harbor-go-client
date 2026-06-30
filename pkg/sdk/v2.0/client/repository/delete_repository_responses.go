@@ -51,6 +51,12 @@ func (o *DeleteRepositoryReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return nil, result
+	case 412:
+		result := NewDeleteRepositoryPreconditionFailed()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 500:
 		result := NewDeleteRepositoryInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -439,6 +445,88 @@ func (o *DeleteRepositoryNotFound) GetPayload() *models.Errors {
 }
 
 func (o *DeleteRepositoryNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteRepositoryPreconditionFailed creates a DeleteRepositoryPreconditionFailed with default headers values
+func NewDeleteRepositoryPreconditionFailed() *DeleteRepositoryPreconditionFailed {
+	return &DeleteRepositoryPreconditionFailed{}
+}
+
+/*
+DeleteRepositoryPreconditionFailed describes a response with status code 412, with default header values.
+
+Precondition failed. The repository contains images protected by an immutable tag rule and cannot be deleted.
+*/
+type DeleteRepositoryPreconditionFailed struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this delete repository precondition failed response has a 2xx status code
+func (o *DeleteRepositoryPreconditionFailed) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete repository precondition failed response has a 3xx status code
+func (o *DeleteRepositoryPreconditionFailed) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete repository precondition failed response has a 4xx status code
+func (o *DeleteRepositoryPreconditionFailed) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete repository precondition failed response has a 5xx status code
+func (o *DeleteRepositoryPreconditionFailed) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete repository precondition failed response a status code equal to that given
+func (o *DeleteRepositoryPreconditionFailed) IsCode(code int) bool {
+	return code == 412
+}
+
+// Code gets the status code for the delete repository precondition failed response
+func (o *DeleteRepositoryPreconditionFailed) Code() int {
+	return 412
+}
+
+func (o *DeleteRepositoryPreconditionFailed) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /projects/{project_name}/repositories/{repository_name}][%d] deleteRepositoryPreconditionFailed %s", 412, payload)
+}
+
+func (o *DeleteRepositoryPreconditionFailed) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /projects/{project_name}/repositories/{repository_name}][%d] deleteRepositoryPreconditionFailed %s", 412, payload)
+}
+
+func (o *DeleteRepositoryPreconditionFailed) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *DeleteRepositoryPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// hydrates response header X-Request-Id
 	hdrXRequestID := response.GetHeader("X-Request-Id")

@@ -534,6 +534,8 @@ func (a *Client) ListArtifactsOfProject(ctx context.Context, params *ListArtifac
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListArtifactsOfProjectNotFound:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *ListArtifactsOfProjectUnprocessableEntity:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListArtifactsOfProjectInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	}
@@ -572,7 +574,11 @@ func (a *Client) ListProjects(ctx context.Context, params *ListProjectsParams) (
 	switch value := result.(type) {
 	case *ListProjectsOK:
 		return value, nil
+	case *ListProjectsBadRequest:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListProjectsUnauthorized:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *ListProjectsUnprocessableEntity:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListProjectsInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())

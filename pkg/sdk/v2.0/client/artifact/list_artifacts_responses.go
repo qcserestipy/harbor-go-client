@@ -53,6 +53,12 @@ func (o *ListArtifactsReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return nil, result
+	case 422:
+		result := NewListArtifactsUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 500:
 		result := NewListArtifactsInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -469,6 +475,88 @@ func (o *ListArtifactsNotFound) GetPayload() *models.Errors {
 }
 
 func (o *ListArtifactsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header X-Request-Id
+	hdrXRequestID := response.GetHeader("X-Request-Id")
+
+	if hdrXRequestID != "" {
+		o.XRequestID = hdrXRequestID
+	}
+
+	o.Payload = new(models.Errors)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewListArtifactsUnprocessableEntity creates a ListArtifactsUnprocessableEntity with default headers values
+func NewListArtifactsUnprocessableEntity() *ListArtifactsUnprocessableEntity {
+	return &ListArtifactsUnprocessableEntity{}
+}
+
+/*
+ListArtifactsUnprocessableEntity describes a response with status code 422, with default header values.
+
+Unsupported type. The resource or its properties are not supported by the requested operation.
+*/
+type ListArtifactsUnprocessableEntity struct {
+
+	/* The ID of the corresponding request for the response
+	 */
+	XRequestID string
+
+	Payload *models.Errors
+}
+
+// IsSuccess returns true when this list artifacts unprocessable entity response has a 2xx status code
+func (o *ListArtifactsUnprocessableEntity) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list artifacts unprocessable entity response has a 3xx status code
+func (o *ListArtifactsUnprocessableEntity) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list artifacts unprocessable entity response has a 4xx status code
+func (o *ListArtifactsUnprocessableEntity) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list artifacts unprocessable entity response has a 5xx status code
+func (o *ListArtifactsUnprocessableEntity) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list artifacts unprocessable entity response a status code equal to that given
+func (o *ListArtifactsUnprocessableEntity) IsCode(code int) bool {
+	return code == 422
+}
+
+// Code gets the status code for the list artifacts unprocessable entity response
+func (o *ListArtifactsUnprocessableEntity) Code() int {
+	return 422
+}
+
+func (o *ListArtifactsUnprocessableEntity) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories/{repository_name}/artifacts][%d] listArtifactsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListArtifactsUnprocessableEntity) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /projects/{project_name}/repositories/{repository_name}/artifacts][%d] listArtifactsUnprocessableEntity %s", 422, payload)
+}
+
+func (o *ListArtifactsUnprocessableEntity) GetPayload() *models.Errors {
+	return o.Payload
+}
+
+func (o *ListArtifactsUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// hydrates response header X-Request-Id
 	hdrXRequestID := response.GetHeader("X-Request-Id")

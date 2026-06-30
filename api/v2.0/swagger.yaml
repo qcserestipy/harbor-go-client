@@ -262,10 +262,14 @@ paths:
       responses:
         '200':
           description: Modify system configurations successfully.
+        '400':
+          $ref: '#/responses/400'
         '401':
           description: User need to log in first.
         '403':
           description: User does not have permission of admin role.
+        '422':
+          $ref: '#/responses/422'
         '500':
           description: Unexpected internal errors.
   /projects:
@@ -316,8 +320,12 @@ paths:
             Link:
               description: Link refers to the previous page and next page
               type: string
+        '400':
+          $ref: '#/responses/400'
         '401':
           $ref: '#/responses/401'
+        '422':
+          $ref: '#/responses/422'
         '500':
           $ref: '#/responses/500'
     head:
@@ -910,6 +918,8 @@ paths:
           $ref: '#/responses/403'
         '404':
           $ref: '#/responses/404'
+        '422':
+          $ref: '#/responses/422'
         '500':
           $ref: '#/responses/500'
   /projects/{project_name}/repositories/{repository_name}:
@@ -1000,6 +1010,14 @@ paths:
               type: string
           schema:
             $ref: '#/definitions/Errors'
+        '412':
+          description: Precondition failed. The repository contains images protected by an immutable tag rule and cannot be deleted.
+          headers:
+            X-Request-Id:
+              description: The ID of the corresponding request for the response
+              type: string
+          schema:
+            $ref: '#/definitions/Errors'
         '500':
           $ref: '#/responses/500'
   /projects/{project_name}/repositories/{repository_name}/artifacts:
@@ -1082,6 +1100,8 @@ paths:
               type: string
           schema:
             $ref: '#/definitions/Errors'
+        '422':
+          $ref: '#/responses/422'
         '500':
           $ref: '#/responses/500'
     post:
@@ -1428,6 +1448,8 @@ paths:
           $ref: '#/responses/403'
         '404':
           $ref: '#/responses/404'
+        '422':
+          $ref: '#/responses/422'
         '500':
           $ref: '#/responses/500'
   /projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/tags/{tag_name}:
@@ -1722,6 +1744,8 @@ paths:
           $ref: '#/responses/403'
         '404':
           $ref: '#/responses/404'
+        '422':
+          $ref: '#/responses/422'
         '500':
           $ref: '#/responses/500'
   '/projects/{project_name_or_id}/scanner':

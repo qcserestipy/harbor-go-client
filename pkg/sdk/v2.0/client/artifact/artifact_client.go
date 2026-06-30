@@ -548,6 +548,8 @@ func (a *Client) ListArtifacts(ctx context.Context, params *ListArtifactsParams)
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListArtifactsNotFound:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *ListArtifactsUnprocessableEntity:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListArtifactsInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	}
@@ -593,6 +595,8 @@ func (a *Client) ListTags(ctx context.Context, params *ListTagsParams) (*ListTag
 	case *ListTagsForbidden:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListTagsNotFound:
+		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
+	case *ListTagsUnprocessableEntity:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
 	case *ListTagsInternalServerError:
 		return nil, runtime.NewAPIError("unsuccessful response", value, value.Code())
